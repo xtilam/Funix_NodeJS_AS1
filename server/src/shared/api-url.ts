@@ -10,7 +10,3 @@ export const apiUrls = {
     getAuthUser: (token = ":token") => `/auth/get-user/${token}`,
   },
 };
-
-export const resourceUrls = {
-  imageURL: (subURL: string) => `${subURL}`,
-};

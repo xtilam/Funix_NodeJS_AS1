@@ -25,6 +25,7 @@ const main = async () => {
   app.use("/api", movieRouter);
 
   app.use("/api", notFoundHandler);
+
   app.listen(CONFIGS.SERVER_PORT, () => {
     console.log(`server start: ${CONFIGS.SERVER_PORT}`);
   });

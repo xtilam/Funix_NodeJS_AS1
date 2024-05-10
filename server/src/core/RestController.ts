@@ -2,20 +2,20 @@ import { Request, Response } from "express";
 import { RestControllerAPI } from "./RestControllerAPI";
 import { RequestHandler } from "express-serve-static-core";
 
+/**
+ * class giúp tạo ra các request handler async
+ */
+
 export class RestController<T = {}> {
   handlers = {} as T;
 
-  async<K extends string>(
+  addAsyncHandler<K extends string>(
     key: K,
-    callback: (
-      req: Request,
-      res: Response,
-      api: RestControllerAPI
-    ) => Promise<any>
+    handler: RestControllerAsyncHandler
   ) {
     this.handlers[key as any] = ((req, res) => {
       const api = new RestControllerAPI(req, res);
-      callback(req, res, api)
+      handler(req, res, api)
         .then((result) => {
           if (api.isDone) return;
           try {
@@ -33,4 +33,19 @@ export class RestController<T = {}> {
 
     return this as RestController<T & { [n in K]: any }>;
   }
+  addAsyncHandlerFromObject<
+    O extends Record<string, RestControllerAsyncHandler>
+  >(handlers: O) {
+    for (const [name, handler] of Object.entries(handlers)) {
+      this.addAsyncHandler(name, handler);
+    }
+    return this as RestController<T & Record<keyof O, any>>;
+  }
 }
+
+// ----------------------------------------------
+export type RestControllerAsyncHandler = (
+  req: Request,
+  res: Response,
+  api: RestControllerAPI
+) => Promise<any>;

@@ -6,6 +6,10 @@ const defaultPaginationConfig = {
   max: 20,
 };
 
+/**
+ * class tạo api object của rest controller
+ * chứa các hàm utils
+ */
 export class RestControllerAPI {
   res: Response;
   req: Request;
@@ -34,6 +38,9 @@ export class RestControllerAPI {
     this._isDone = true;
     throw undefined;
   }
+  /**
+   * Lấy các tham số phân trang cơ bản từ request => pageIndex, pageTotal, pageLimit
+   */
   getPagination(
     config = defaultPaginationConfig as Partial<typeof defaultPaginationConfig>,
     length: number
@@ -67,19 +74,23 @@ export class RestControllerAPI {
         : Math.ceil(totalPage),
     };
   }
+  /**
+   * chuyển listData bất kì thành đối tượng phân trang
+   * @returns Trả về đối tượng phân trang
+   */
   paginationList<T>(
-    data: T[],
+    listData: T[],
     config = defaultPaginationConfig as Partial<typeof defaultPaginationConfig>
   ) {
     const { start, end, totalPage, page, limit } = this.getPagination(
       config,
-      data.length
+      listData.length
     );
 
     const results: T[] = [];
 
     for (let i = start; i < end; i++) {
-      results.push(data[i]);
+      results.push(listData[i]);
     }
 
     return {
@@ -90,7 +101,9 @@ export class RestControllerAPI {
     };
   }
 }
-
+/**
+ * class giúp lấy query tiện hơn
+ */
 class RestControllerQueryAPI {
   private _query: Object;
   private _rest: RestControllerAPI;
@@ -111,6 +124,9 @@ class RestControllerQueryAPI {
   }
 }
 
+/**
+ * class giúp lấy body tiện hơn
+ */
 class RestControllerBodyAPI {
   private _body: Object;
   private _rest: RestControllerAPI;

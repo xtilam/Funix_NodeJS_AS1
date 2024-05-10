@@ -11,6 +11,8 @@ const build = async () => {
   const devEnvPath = path.join(__dirname, "../.env");
   const clientDir = path.join(__dirname, "../../client");
   const clientDist = path.join(clientDir, "dist");
+  const clientSharedDir = path.join(__dirname, "../../client/src/shared");
+  const serverSharedDir = path.join(__dirname, "../src/shared");
 
   if (fs.existsSync(distPath)) fs.rmSync(distPath, { recursive: true });
   fs.mkdirSync(distPath);
@@ -19,6 +21,10 @@ const build = async () => {
   await waitTask(spawn(npx, ["tsc", "--build", "--sourceMap", "false"]));
   const packageJSON = require("../package.json");
   delete packageJSON.devDependencies;
+
+  
+  if (fs.existsSync(clientSharedDir)) fs.rmSync(clientSharedDir, { recursive: true });
+  fs.cpSync(serverSharedDir, clientSharedDir, { recursive: true });
 
   console.log("build client...");
   await waitTask(spawn(npx, ["vite", "build"], { cwd: clientDir }));
