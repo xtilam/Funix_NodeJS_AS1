@@ -9,6 +9,7 @@ import { MovieTopRateSort } from "./model/MovieTopRateSort";
 import { authRouter } from "./routes/auth-router";
 import { movieRouter } from "./routes/movie-router";
 import { MovieTrendingSort } from "./model/MovieTrendingSort";
+import path from "path";
 
 const main = async () => {
   await MovieTopRateSort.updateLate();
@@ -16,7 +17,10 @@ const main = async () => {
 
   const app = express();
   app.use(express.static(CONFIGS.PUBLIC_DIR));
-  if (CONFIGS.IS_DEV) app.use(cors({ origin: "*" }));
+
+  if (CONFIGS.IS_DEV) {
+    app.use(cors({ origin: "*" }));
+  }
 
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
@@ -26,6 +30,10 @@ const main = async () => {
 
   app.use("/api", notFoundHandler);
 
+  if (!CONFIGS.IS_DEV) {
+    app.use("*", spaHandler());
+  }
+
   app.listen(CONFIGS.SERVER_PORT, () => {
     console.log(`server start: ${CONFIGS.SERVER_PORT}`);
   });
@@ -33,5 +41,12 @@ const main = async () => {
 
 const notFoundHandler: RequestHandler = (_req, res) =>
   res.status(404).json({ message: "Route not found" });
+
+const spaHandler = () => {
+  const indexHTML = path.join(CONFIGS.PUBLIC_DIR, "index.html");
+  return ((_req, res) => {
+    res.sendFile(path.resolve(indexHTML));
+  }) as RequestHandler;
+};
 
 main();
