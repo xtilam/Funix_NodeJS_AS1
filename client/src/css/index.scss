@@ -1,0 +1,47 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  font-size: 1rem;
+  font-family: inherit;
+  min-height: 120vh;
+  width: 100%;
+  background: #000;
+  color: white;
+}
+
+svg {
+  display: inline-block;
+}
+
+// black scroll for movies
+.black-scroll {
+  /* width */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 1rem;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #11171a;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #222222;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}

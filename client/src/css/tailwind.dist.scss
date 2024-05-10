@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-medium uppercase;
+}
+
+button {
+  @apply btn-primary;
+}
+
+@layer components {
+  .form-group {
+    @apply relative mt-1 grid w-full justify-items-start gap-1;
+    > .label {
+      @apply pointer-events-none absolute left-0 top-2 text-gray-500 duration-75;
+    }
+    > label.error {
+      @apply text-sm font-medium text-danger;
+    }
+    > input {
+      &.error {
+        @apply border-danger;
+      }
+      &:disabled,
+      &:read-only {
+        @apply text-gray-400;
+        & + .label {
+          @apply font-bold;
+        }
+      }
+      &:focus + .label,
+      &:not(:placeholder-shown) + .label {
+        @apply absolute top-0 -translate-y-1/2 py-0 text-xs font-medium text-primary;
+      }
+      &:focus {
+        @apply border-primary;
+      }
+      @apply w-full border-b py-2 outline-none duration-75 bg-transparent;
+    }
+  }
+}
+
+svg {
+  @apply h-[1em] w-[1em] stroke-current;
+}
+
+.loader {
+  @apply h-[1em] w-[1em] animate-[spin_.4s_linear_infinite] rounded-full border-[.15em] border-[currentColor] border-b-transparent bg-transparent;
+}
+
+input[type="checkbox"] {
+  height: 1.5em !important;
+  width: 1.5em !important;
+  @apply m-0 p-0;
+}
